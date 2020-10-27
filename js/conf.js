@@ -1,6 +1,6 @@
 const endpoint = 'https://www.openstreetmap.org';
-const oauthConsumerKey = '...';
-const oauthSecret = '...';
+const oauthConsumerKey = 'I69OKE4AJekp1LiCQ5RSytZW3MWYo6bGnXFdWZq0';
+const oauthSecret = '61eu77LfldaUpvxtvrGTkoo3h6uR5e4oh4En450o';
 
 const ConfOsmRequest = {
   endpoint: endpoint,
