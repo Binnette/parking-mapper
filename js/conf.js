@@ -1,6 +1,7 @@
 const endpoint = 'https://www.openstreetmap.org';
 const oauthConsumerKey = 'I69OKE4AJekp1LiCQ5RSytZW3MWYo6bGnXFdWZq0';
 const oauthSecret = '61eu77LfldaUpvxtvrGTkoo3h6uR5e4oh4En450o';
+const overpassApiUrl = '//overpass-api.de/api/';
 
 const ConfOsmRequest = {
   endpoint: endpoint,

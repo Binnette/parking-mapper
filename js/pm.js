@@ -119,7 +119,7 @@ function loadParkings(bounds) {
   bbox = bounds._southWest.lat + ', ' + bounds._southWest.lng + ', ' +
     bounds._northEast.lat + ', ' + bounds._northEast.lng;
 
-  let url = 'http://overpass-api.de/api/interpreter?data=' +
+  let url = overpassApiUrl + 'interpreter?data=' +
     '[out:json];' +
     '(' +
     'way[amenity=parking][!parking](' + bbox + ');' +
