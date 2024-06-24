@@ -1,12 +1,31 @@
+import 'remodal/dist/remodal.css'
+import 'remodal/dist/remodal-default-theme.css'
+import 'jquery-toast-plugin/dist/jquery.toast.min.css'
+import 'leaflet/dist/leaflet.css'
+import './style.css'
+
+import L from 'leaflet'
+import $ from 'jquery'
+import 'jquery-toast-plugin'
+import 'remodal'
+import { osmAuth } from 'osm-auth';
+import { conf, overpassApiUrl} from './conf.js'
+
 // ui components
 let map, polyline, bbox, parkings, currentElement, changesetId, index, solved, skipped, solvedChangeset, total;
 // changeset details
 let createdBy = 'Parking-Mapper 1.0.0';
-let comment = 'Add {0} parkings type in bbox({1})';
 let defaultChangesetTags = { source: 'BDOrtho IGN' };
 
-const auth = osmAuth(ConfOsmAuth);
-const osm = new OsmRequest(ConfOsmRequest);
+conf.redirect_uri = window.location.origin + window.location.pathname;
+console.log(conf);
+var auth = osmAuth(conf);
+const osm = new OsmRequest(conf);
+
+if (window.location.search.slice(1).split('&').some(p => p.startsWith('code='))) {
+  console.log('Window call Authenticated');
+  authenticated();
+}
 
 function initParkingMapper() {
   initMap();
@@ -76,15 +95,34 @@ function onClickIdEditor() {
 
 // authenticate user
 function authenticate() {
-  auth.authenticate(function (err) {
-    if (err) {
-      $.toast({
-        heading: 'Error', icon: 'error', hideAfter: false, loaderBg: '#f8f9fa',
-        text: 'Error while trying to authenticate. ' + err.responseText
-      });
-    } else {
-      showPanel('#selection');
-    }
+  if (auth.authenticated()) {
+    authenticated();
+  } else {
+    auth.xhr({ method: "GET", path: "/api/0.6/user/details" },
+      function (err, result) {
+        // result is an XML DOM containing the user details
+        if (err) {
+          $.toast({
+            heading: 'Error', icon: 'error', hideAfter: false, loaderBg: '#f8f9fa',
+            text: 'Error while trying to authenticate. ' + err.responseText
+          });
+          console.error(err);
+          console.error(result);
+        }
+      }
+    );
+  }
+}
+
+function authenticated() {
+  auth.authenticate(() => {
+    // Fully authed at this point
+    // remove code and state from url
+    const currentUrl = window.location.href;
+    const cleanUrl = currentUrl.split('?')[0];
+    window.history.replaceState({}, '', cleanUrl);
+    console.log('Authenticated');
+    showPanel('#selection');
   });
 }
 
@@ -128,7 +166,9 @@ function loadParkings(bounds) {
     'out ids geom;';
 
   fetch(url)
-    .then(res => res.json())
+    .then((res) => {
+      return res.json()
+    })
     .then((data) => {
       // when parking are loaded
       parkings = data.elements;
@@ -161,6 +201,7 @@ function loadParkings(bounds) {
         heading: 'Error', icon: 'error', hideAfter: false, loaderBg: '#f8f9fa',
         text: 'Error while trying to query Overpass.' + err
       });
+      console.error(err);
       showPanel('#selection');
     });
 }
@@ -250,16 +291,8 @@ function onClickType(event) {
   setParkingType(type);
 }
 
-function format() {
-  let str = arguments[0];
-  for (let i = 1; i < arguments.length; i++) {
-    str = str.replace(new RegExp('\\{' + (i - 1) + '\\}', 'g'), arguments[i]);
-  }
-  return str;
-}
-
 function getComment() {
-  return format(comment, solvedChangeset, bbox);
+  return `Add parking type for ${solvedChangeset} parkings in bbox(${bbox})`;
 }
 
 function getChangesetTags() {

@@ -1,138 +1,125 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Parking Mapper</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="./logo.svg" />
+    <script type="text/javascript" src="./OsmRequest.js"></script>
+  </head>
+  <body>
 
-<head>
-  <title>Parking Mapper</title>
-  <meta charset='utf8'>
-  <link rel='stylesheet' href='node_modules/leaflet/dist/leaflet.css'>
-  <link rel='stylesheet' href='node_modules/jquery-toast-plugin/dist/jquery.toast.min.css'>
-  <link rel="stylesheet" href="node_modules/remodal/dist/remodal.css">
-  <link rel="stylesheet" href="node_modules/remodal/dist/remodal-default-theme.css">
-  <link rel='stylesheet' href='css/pm.css'>
-  <script type='module' src='node_modules/osm-auth/osmauth.min.js'></script>
-  <script type='module' src='node_modules/osm-request/dist/OsmRequest.js'></script>
-  <script src='node_modules/leaflet/dist/leaflet.js'></script>
-  <script src='node_modules/jquery/dist/jquery.min.js'></script>
-  <script src='node_modules/jquery-toast-plugin/dist/jquery.toast.min.js'></script>
-  <script src="node_modules/remodal/dist/remodal.min.js"></script>
-  <script src='js/test.js'></script>
-  <script src='js/conf.js'></script>
-  <script type='module' src='js/pm.js'></script>
-</head>
-
-<body>
-
-  <!-- top pannel -->
-  <div class='parent top'>
-    <div class='left'>
-      <a href="" class='title'>Parking Mapper</a>
+    <!-- top pannel -->
+    <div class='parent top'>
+      <div class='left'>
+        <a href="" class='title'>Parking Mapper</a>
+      </div>
+      <div class='right'>
+        <a class='button' data-remodal-target="modal">About</a>
+      </div>
     </div>
-    <div class='right'>
-      <a class='button' data-remodal-target="modal">About</a>
-    </div>
-  </div>
 
-  <!-- main panel-->
-  <div class='parent main'>
-    <div class='left'>
-      <div id='welcome' class='panel'>
-        <h3>Welcome to parking mapper</h3>
-        <p>The goal of this web app is to easily add <a href="https://wiki.openstreetmap.org/wiki/Key:parking">parking
-            type</a> by looking to aerial imagery.</p>
-        <p>Before starting to identify parking type, please have a look to the <a
-            href="https://wiki.openstreetmap.org/wiki/Key:parking">documentation</a> to
-          understand the differences between the main parking types.</p>
-        <div id='connected' class='div-authent' style="display: none;">
-          <p>You are connected as <span id='pseudo'></span>. Click on 'Start' to solve challenge or 'Logout' to change
-            account.</p>
-          <button id='start' class="authenticate">Start</button>
-          <button id='logout'>Logout</button>
+    <!-- main panel-->
+    <div class='parent main'>
+      <div class='left'>
+        <div id='welcome' class='panel'>
+          <h3>Welcome to parking mapper</h3>
+          <p>The goal of this web app is to easily add <a href="https://wiki.openstreetmap.org/wiki/Key:parking">parking
+              type</a> by looking to aerial imagery.</p>
+          <p>Before starting to identify parking type, please have a look to the <a
+              href="https://wiki.openstreetmap.org/wiki/Key:parking">documentation</a> to
+            understand the differences between the main parking types.</p>
+          <div id='connected' class='div-authent' style="display: none;">
+            <p>You are connected as <span id='pseudo'></span>. Click on 'Start' to solve challenge or 'Logout' to change
+              account.</p>
+            <button id='start' class="authenticate">Start</button>
+            <button id='logout'>Logout</button>
+          </div>
+          <div id='disconnected' class='div-authent' style="display: none;">
+            <p>When ready, press 'Authenticate' button.</p>
+            <button id='authenticate' class="authenticate">Authenticate</button>
+          </div>
         </div>
-        <div id='disconnected' class='div-authent' style="display: none;">
-          <p>When ready, press 'Authenticate' button.</p>
-          <button id='authenticate' class="authenticate">Authenticate</button>
+        <div id='selection' class='panel' style="display: none;">
+          <p>
+            Move the map to desired location, then press the button to get parkings.
+          </p>
+          <button id='query-parking'>Get parkings</button>
         </div>
-      </div>
-      <div id='selection' class='panel' style="display: none;">
-        <p>
-          Move the map to desired location, then press the button to get parkings.
-        </p>
-        <button id='query-parking'>Get parkings</button>
-      </div>
-      <div id='loading' class='panel' style="display: none;">
-        Loading parkings from Overpass...
-      </div>
-      <div id='challenge' class='panel' style="display: none;">
-        <p class='question'>What is this parking type?</p>
-        <table>
-          <tr>
-            <td><button id='surface' class="action type" value='surface'>surface</button></td>
-            <td>One level of parking on the ground.</td>
-          </tr>
-          <tr>
-            <td><button id='underground' class="action type" value='underground'>underground</button></td>
-            <td>Underground parking.</td>
-          </tr>
-          <tr>
-            <td><button id='multi-storey' class="action type" value='multi-storey'>multi-storey</button></td>
-            <td>Two or more levels of parking decks in a building structure.</td>
-          </tr>
-          <tr>
-            <td><button id='carports' class="action type" value='carports'>carports</button></td>
-            <td>Structure used to offer limited protection from the elements. Typically without walls.</td>
-          </tr>
-          <tr>
-            <td><button id='rooftop' class="action type" value='rooftop'>rooftop</button></td>
-            <td>One level of a parking deck on top of the building.</td>
-          </tr>
-          <tr>
-            <td><button id='garage_boxes' class="action type" value='garage_boxes'>garage_boxes</button></td>
-            <td>One level buildings with multiple individual boxes for one car.</td>
-          </tr>
-          <tr>
-            <td><button id='next' class='action'>next =></button></td>
-            <td>Jump to the next parking.</td>
-          </tr>
-        </table>
-        <p>Manualy edit :
-          <button id='ideditor' class='action button'>iD editor</button>
-        </p>
-        <p>
-          Challenge: <span id='index'></span> / <span id='total'></span>
-          Solved: <span id='solved'></span>
-          Skipped: <span id='skipped'></span>
-        </p>
-        <p id='challenge-error' class='error' style="display: none;"></p>
-      </div>
-      <div id='done' class='panel' style='display: none;'>
-        <h2>Congratulation!</h2>
-        <p>You solved <span id='solved-done'></span> on <span id='total-done'></span> challenges in this area.</p>
-        <p>You can select a new area by pressing following button.</p>
-        <button id="restart-done" class="authenticate">Start</button>
-      </div>
-      <div id='end-error' style='display: none;'>
-        <h2>Error while sending change to server</h2>
-        <p id='closing-error'></p>
-        <p>You can start over by pressing following button.</p>
-        <button id="restart-error" class="authenticate">Start</button>
-      </div>
+        <div id='loading' class='panel' style="display: none;">
+          Loading parkings from Overpass...
+        </div>
+        <div id='challenge' class='panel' style="display: none;">
+          <p class='question'>What is this parking type?</p>
+          <table>
+            <tr>
+              <td><button id='surface' class="action type" value='surface'>surface</button></td>
+              <td>One level of parking on the ground.</td>
+            </tr>
+            <tr>
+              <td><button id='underground' class="action type" value='underground'>underground</button></td>
+              <td>Underground parking.</td>
+            </tr>
+            <tr>
+              <td><button id='multi-storey' class="action type" value='multi-storey'>multi-storey</button></td>
+              <td>Two or more levels of parking decks in a building structure.</td>
+            </tr>
+            <tr>
+              <td><button id='carports' class="action type" value='carports'>carports</button></td>
+              <td>Structure used to offer limited protection from the elements. Typically without walls.</td>
+            </tr>
+            <tr>
+              <td><button id='rooftop' class="action type" value='rooftop'>rooftop</button></td>
+              <td>One level of a parking deck on top of the building.</td>
+            </tr>
+            <tr>
+              <td><button id='garage_boxes' class="action type" value='garage_boxes'>garage_boxes</button></td>
+              <td>One level buildings with multiple individual boxes for one car.</td>
+            </tr>
+            <tr>
+              <td><button id='next' class='action'>next =></button></td>
+              <td>Jump to the next parking.</td>
+            </tr>
+          </table>
+          <p>Manualy edit :
+            <button id='ideditor' class='action button'>iD editor</button>
+          </p>
+          <p>
+            Challenge: <span id='index'></span> / <span id='total'></span>
+            Solved: <span id='solved'></span>
+            Skipped: <span id='skipped'></span>
+          </p>
+          <p id='challenge-error' class='error' style="display: none;"></p>
+        </div>
+        <div id='done' class='panel' style='display: none;'>
+          <h2>Congratulation!</h2>
+          <p>You solved <span id='solved-done'></span> on <span id='total-done'></span> challenges in this area.</p>
+          <p>You can select a new area by pressing following button.</p>
+          <button id="restart-done" class="authenticate">Start</button>
+        </div>
+        <div id='end-error' style='display: none;'>
+          <h2>Error while sending change to server</h2>
+          <p id='closing-error'></p>
+          <p>You can start over by pressing following button.</p>
+          <button id="restart-error" class="authenticate">Start</button>
+        </div>
 
-      <!--modal-->
-      <div class="remodal" data-remodal-id="modal">
-        <div class=title>Parking Mapper</div>
-        <div>Version: 1.0.0</div>
-        <p>
-          <a href="https://github.com/Binnette/parking-mapper">Code source on Github</a>
-        </p>
-        <button data-remodal-action="confirm">Close</button>
-      </div>
+        <!--modal-->
+        <div class="remodal" data-remodal-id="modal">
+          <div class=title>Parking Mapper</div>
+          <div>Version: 1.1.0</div>
+          <p>
+            <a href="https://github.com/Binnette/parking-mapper">Code source on Github</a>
+          </p>
+          <button data-remodal-action="confirm">Close</button>
+        </div>
 
+      </div>
+      <div class='right'>
+        <div id='map'></div>
+      </div>
     </div>
-    <div class='right'>
-      <div id='map'></div>
-    </div>
-  </div>
 
-</body>
-
+    <script type="module" src="/src/main.js"></script>
+  </body>
 </html>
