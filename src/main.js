@@ -1,8 +1,8 @@
 import 'remodal/dist/remodal.css'
 import 'remodal/dist/remodal-default-theme.css'
 import 'jquery-toast-plugin/dist/jquery.toast.min.css'
-import 'leaflet/dist/leaflet.css'
 import './style.css'
+import 'leaflet/dist/leaflet.css'
 
 import L from 'leaflet'
 import $ from 'jquery'
@@ -14,18 +14,13 @@ import { conf, overpassApiUrl} from './conf.js'
 // ui components
 let map, polyline, bbox, parkings, currentElement, changesetId, index, solved, skipped, solvedChangeset, total;
 // changeset details
-let createdBy = 'Parking-Mapper 1.0.0';
+let createdBy = 'Parking-Mapper 1.1.0';
 let defaultChangesetTags = { source: 'BDOrtho IGN' };
 
 conf.redirect_uri = window.location.origin + window.location.pathname;
 console.log(conf);
 var auth = osmAuth(conf);
 const osm = new OsmRequest(conf);
-
-if (window.location.search.slice(1).split('&').some(p => p.startsWith('code='))) {
-  console.log('Window call Authenticated');
-  authenticated();
-}
 
 function initParkingMapper() {
   initMap();
@@ -36,15 +31,32 @@ function initParkingMapper() {
 // Initialize leaflet map
 function initMap() {
   map = L.map('map');
-  map.setView([46.619, 3.164], 6);
+  map.setView([47.0, 2.0], 5);
 
-  L.tileLayer('https://proxy-ign.openstreetmap.fr/94GjiyqD/bdortho/{z}/{x}/{y}.jpg', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    maxZoom: 22, maxNativeZoom: 18
-  }).addTo(map);
+  let baseLayers = {
+    'BDOrtho IGN': L.tileLayer('https://proxy-ign.openstreetmap.fr/94GjiyqD/bdortho/{z}/{x}/{y}.jpg', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 22, maxNativeZoom: 18
+    }),
+    'Esri World Imagery': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    }),
+    'Esri World Imagery (Clarity) Beta': L.tileLayer('https://clarity.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DigitalGlobe, GeoEye, Earthstar Geographics, CNES/Airbus DS, USDA, USGS, AeroGRID, IGN, and the GIS User Community'
+    })
+  };
+
+  baseLayers['BDOrtho IGN'].addTo(map);
+
+  L.control.layers(baseLayers).addTo(map);
+
+  map.on('baselayerchange', function (e) {
+    defaultChangesetTags.source = e.name;
+  });
 }
 
 function initUser() {
+  console.log('initUser')
   $('.div-authent').toggle(false);
   if (auth.authenticated()) {
     auth.xhr({
@@ -53,8 +65,10 @@ function initUser() {
     }, function (err, data) {
       if (err) {
         $.toast({
-          heading: 'Error', icon: 'error', hideAfter: false, loaderBg: '#f8f9fa',
-          text: 'Error while trying to get user details. ' + err.responseText
+          icon: 'error',
+          heading: 'Error getting user details',
+          text: err.responseText,
+          position: 'bottom-center'
         });
         auth.logout();
         initUser();
@@ -72,12 +86,36 @@ function initUser() {
 // Initialize the full UI. Bind button, etc.
 function initUi() {
   // bind buttons 
-  $('.authenticate').on('click', authenticate);
+  $('#connect').on('click', authenticate);
   $('#logout').on('click', disconnect);
+  $("#start").on('click', () => {
+    toggleModal(false, 'modal');
+    showToolbar('#selection');
+  });
+  $("#btn-start-here").on('click', () => {
+    showPanel('#welcome');
+    toggleModal(true, 'modal');
+  });
   $('#query-parking').on('click', queryParking);
   $('.type').on('click', onClickType);
-  $('#next').on('click', onClickNext);
+  $('#more').on('click', () => toggleModal(true, 'modal-more'));
+  $('.next').on('click', onClickNext);
   $('#ideditor').on('click', onClickIdEditor);
+
+  $('#back').on('click', () => showPanel('#welcome'));
+  $('.continue').on('click', () => showPanel('#welcome'));
+  $('.btn-about').on('click', () => showPanel('#about'));
+
+  toggleModal(true, 'modal');
+}
+
+function toggleModal(toggle, id) {
+  var modal = $(`[data-remodal-id=${id}]`).remodal({ hashTracking: false });
+  if (toggle) {
+    modal.open();
+  } else {
+    modal.close();
+  }
 }
 
 function onClickIdEditor() {
@@ -87,8 +125,10 @@ function onClickIdEditor() {
     window.open(url);
   } else {
     $.toast({
-      heading: 'Error', icon: 'error', loaderBg: '#f8f9fa',
-      text: 'Error opening iD editor. Can not find current element.'
+      icon: 'error',
+      heading: 'No current element',
+      text: 'Can not open iD editor.',
+      position: 'bottom-center'
     });
   }
 }
@@ -103,8 +143,10 @@ function authenticate() {
         // result is an XML DOM containing the user details
         if (err) {
           $.toast({
-            heading: 'Error', icon: 'error', hideAfter: false, loaderBg: '#f8f9fa',
-            text: 'Error while trying to authenticate. ' + err.responseText
+            icon: 'error',
+            heading: 'Error authenticating',
+            text: + err.responseText,
+            position: 'bottom-center'
           });
           console.error(err);
           console.error(result);
@@ -122,7 +164,7 @@ function authenticated() {
     const cleanUrl = currentUrl.split('?')[0];
     window.history.replaceState({}, '', cleanUrl);
     console.log('Authenticated');
-    showPanel('#selection');
+    initParkingMapper();
   });
 }
 
@@ -138,17 +180,24 @@ function showPanel(panel) {
   $(panel).toggle(true);
 }
 
+function showToolbar(toolbar) {
+  $('.toolbar').toggle(false);
+  $(toolbar).toggle(true);
+}
+
 function queryParking() {
   $.toast().reset('all');
   let zoom = map.getZoom();
   if (zoom < 10) {
     $.toast({
-      heading: 'Error', icon: 'error', hideAfter: false, loaderBg: '#f8f9fa',
-      text: 'Area too large. Zoom at least to 10.<br>Current zoom: ' + zoom
+      icon: 'error',
+      heading: 'Area too large',
+      text: 'Zoom at least to 10 (current: ' + zoom + ')',
+      position: 'bottom-center'
     });
     return;
   }
-  showPanel('#loading');
+  showToolbar('#loading');
   loadParkings(map.getBounds());
 }
 
@@ -185,24 +234,28 @@ function loadParkings(bounds) {
         $('#solved').text(solved);
         $('#skipped').text(skipped);
         // show the challenge panel
-        showPanel('#challenge');
+        showToolbar('#challenge');
         // go to the first parking
         next();
         return;
       } else {
         $.toast({
-          heading: 'Warning', icon: 'warning', loaderBg: '#f8f9fa',
-          text: 'Overpass found no parking without type in this area.'
+          icon: 'warning',
+          heading: 'Found no parking without type',
+          text: 'Move map to another area.',
+          position: 'bottom-center'
         });
-        showPanel('#selection');
+        showToolbar('#selection');
       }
     }).catch(function (err) {
       $.toast({
-        heading: 'Error', icon: 'error', hideAfter: false, loaderBg: '#f8f9fa',
-        text: 'Error while trying to query Overpass.' + err
+        icon: 'error',
+        heading: 'Error getting parking',
+        text: err,
+        position: 'bottom-center'
       });
       console.error(err);
-      showPanel('#selection');
+      showToolbar('#selection');
     });
 }
 
@@ -231,11 +284,18 @@ function showParking(p) {
     $('#index').text(index);
     if (is404(err)) {
       $.toast({
-        heading: 'Error', icon: 'error', loaderBg: '#f8f9fa',
-        text: 'Element ' + p.type + '/' + p.id + ' not found on ' + endpoint
+        icon: 'error',
+        heading: 'Parking not found',
+        text: 'Element ' + p.type + '/' + p.id + ' not found on ' + endpoint,
+        position: 'bottom-center'
       });
     } else {
-      $.toast({ heading: 'Error', icon: 'error', loaderBg: '#f8f9fa', text: err });
+      $.toast({
+        icon: 'error',
+        heading: 'Error getting parking',
+        text: err,
+        position: 'bottom-center'
+      });
     }
   });
 }
@@ -252,6 +312,7 @@ function is404(err) {
 
 // disable button and go to next element
 function onClickNext() {
+  toggleModal(false, 'modal-more');
   $('.action').prop('disabled', true);
   skipped++;
   $('#skipped').text(skipped);
@@ -277,6 +338,8 @@ function next() {
     } else {
       showPanel('#done');
     }
+    toggleModal(true, "modal");
+    showToolbar('#start-here');
     return;
   }
   let p = parkings[index];
@@ -339,8 +402,10 @@ function setElementSuccess(newElementVersion, type) {
     })
     .catch(function (err) {
       $.toast({
-        heading: 'Error', icon: 'error', loaderBg: '#f8f9fa',
-        text: 'Error while trying to update changeset. ' + err
+        icon: 'error',
+        heading: 'Error updating changeset',
+        text: err,
+        position: 'bottom-center'
       });
       next();
     });
@@ -357,11 +422,18 @@ function setElementTag(type) {
     })
     .catch(function (err) {
       $.toast({
-        heading: 'Error', icon: 'error', hideAfter: false, loaderBg: '#f8f9fa',
-        text: 'Error while trying to send element. ' + err
+        icon: 'error',
+        heading: 'Error sending element', 
+        text: err,
+        position: 'bottom-center'
       });
       next();
     });
 }
 
-initParkingMapper();
+if (window.location.search.slice(1).split('&').some(p => p.startsWith('code='))) {
+  console.log('Window call Authenticated');
+  authenticated();
+} else{
+  initParkingMapper();
+}

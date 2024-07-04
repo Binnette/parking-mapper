@@ -1,4 +1,4 @@
-# Parking Mapper 1.0.0
+# Parking Mapper 1.1.0
 
 Parking Mapper is a simple webapp that helps you to directly contribute to OpenStreetMap.
 You will have to identify the type of displayed parkings by looking to the aerial imagery.
@@ -23,13 +23,10 @@ Note: you can skip current parking by pressing button 'next'
 
 ## Run or debug locally
 
-1. Clone this repo
-2. Set const `oauthConsumerKey` and `oauthSecret` in file conf.js
-3. Type following commands:
+1. Clone this repo: `git clone https://github.com/Binnette/parking-mapper.git`
+2. Open cloned repo: `cd parking-mapper`
+3. Install node modules: `npm i`
+4. Run the app locally: `npm run dev`
+5. Open url: https://localhost:5173/parking-mapper
 
-```
-yarn
-yarn serve
-```
-
-Open your web browser: http://localhost:8000/
+Note: this app works and is connected to OSM API, so you can use it directly to edit OSM data.

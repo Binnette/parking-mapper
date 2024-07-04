@@ -25,60 +25,13 @@
 
 body, .remodal {
   background: linear-gradient(90deg, var(--info), var(--primary)); 
-  margin: 0px;
+  margin: 0;
   color: var(--light);
   font-size: 1.2em;
 }
 
 h1, h2,h3 {
-  color: var(--light);
-}
-
-a.button, button, .left a.button {
-  background-color: var(--warning);
-  border: 2px solid var(--dark);
-  color: var(--dark);
-  padding: 4px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-weight: bold;
-  font-size: 1em;
-  cursor: pointer;
-}
-
-button:disabled {
-  background-color: var(--dark-warning);
-  cursor: default;
-}
-
-.parent {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  grid-template-rows: 1fr;
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
-}
-  
-.left { grid-area: 1 / 1 / 2 / 2; }
-.right { grid-area: 1 / 2 / 2 / 3; }
-
-.top {
-  background: linear-gradient(90deg, var(--dark-info), var(--dark-primary));
-  border-bottom: 3px solid var(--dark);
-  padding: 8px;
-}
-
-.top .right {
-  margin: auto 0px auto auto;
-}
-
-.top a.title, .title {
   color: var(--warning);
-  font-size: 1.5em;
-  font-weight: bold;
-  margin: auto 0px;
-  text-decoration: none;
 }
 
 a {
@@ -89,28 +42,98 @@ a:visited {
   color: var(--warning);
 }
 
-.main .left {
-  padding: 8px;
-}
-
-.question {
+a.button, button {
+  background-color: var(--warning);
+  border: 2px solid var(--dark);
+  color: var(--dark);
+  padding: 4px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
   font-weight: bold;
+  font-size: 1em;
+  cursor: pointer;
 }
 
-td {
-  padding-right: 4px;
+a.button:disabled, button:disabled {
+  background-color: var(--dark-warning);
+  cursor: default;
 }
 
-td button {
+.center {
+  text-align: center;
+}
+
+.title {
+  color: var(--warning);
+  font-size: 1.5em;
+  font-weight: bold;
+  margin: auto 0;
+  text-decoration: none;
+}
+
+html, body, .main {
   width: 100%;
+  height: 100%;
 }
 
-.error {
-  color: var(--danger);
+.main {
+  display: grid;
+  width: 100%;
+  grid-template-rows: 10fr 1fr;
 }
 
 #map {
-  height: 600px;
+  height: 100%;
+  width: 100%;
+}
+
+#bottom-bar {
+  background-color: var(--dark);
+  height: 100px;
+  width: 100%;
+}
+
+.toolbar {
+  height: 100%;
+  padding: 0 5px;
+}
+
+.toolbar-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.toolbar-two-row {
+  display: flex;
+  flex-direction: column;
+  height: 100px;
+}
+
+.toolbar-action {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.toolbar-stats {
+  flex-shrink: 0;
+  padding: 5px;
+}
+
+.more-actions {
+  display: flex;
+  flex-direction: column;
+}
+
+#pseudo {
+  color: var(--success);
+}
+
+.jq-toast-wrap {
+  margin-bottom: 100px;
 }
 
 .jq-toast-wrap .jq-toast-single {
@@ -140,7 +163,7 @@ td button {
 }
 
 .jq-toast-wrap .jq-icon-success {
-  background-color: var(--dark-succes);  
+  background-color: var(--dark-success);  
   color: var(--light);
-  border-color: var(--light-succes);
+  border-color: var(--light-success);
 }
