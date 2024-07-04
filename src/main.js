@@ -34,24 +34,30 @@ function initMap() {
   map.setView([47.0, 2.0], 5);
 
   let baseLayers = {
-    'BDOrtho IGN': L.tileLayer('https://proxy-ign.openstreetmap.fr/94GjiyqD/bdortho/{z}/{x}/{y}.jpg', {
+    'OpenStreetMap': L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 22, maxNativeZoom: 19
+    }),
+    'BDOrtho IGN': L.tileLayer('https://proxy-ign.openstreetmap.fr/94GjiyqD/bdortho/{z}/{x}/{y}.jpg', {
+      attribution: '&copy; <a href="https://www.openstreetmap.fr/bdortho/">BDOrtho IGN</a>',
       maxZoom: 22, maxNativeZoom: 18
     }),
     'Esri World Imagery': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+      attribution: '&copy; <a href="https://wiki.openstreetmap.org/wiki/Esri">Esri</a>'
     }),
     'Esri World Imagery (Clarity) Beta': L.tileLayer('https://clarity.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DigitalGlobe, GeoEye, Earthstar Geographics, CNES/Airbus DS, USDA, USGS, AeroGRID, IGN, and the GIS User Community'
+      attribution: '&copy; <a href="https://wiki.openstreetmap.org/wiki/Esri">Esri</a>'
     })
   };
 
-  baseLayers['BDOrtho IGN'].addTo(map);
+  baseLayers['OpenStreetMap'].addTo(map);
 
   L.control.layers(baseLayers).addTo(map);
 
   map.on('baselayerchange', function (e) {
-    defaultChangesetTags.source = e.name;
+    if (e.name !== 'OpenStreetMap') {
+      defaultChangesetTags.source = e.name;
+    }
   });
 }
 
@@ -237,6 +243,13 @@ function loadParkings(bounds) {
         showToolbar('#challenge');
         // go to the first parking
         next();
+        // info message, change to aerial imagery
+        $.toast({
+          icon: 'info',
+          heading: 'Parking(s) found',
+          text: 'Switch to aerial view using the top right button.',
+          position: 'bottom-center'
+        });
         return;
       } else {
         $.toast({
