@@ -9,60 +9,60 @@
   </head>
   <body>
 
-    <div class='main'>
-      <div id='map'></div>
+    <div class="main">
+      <div id="map"></div>
       <div id="bottom-bar">
-        <div id="start-here" class='toolbar toolbar-flex'>
+        <div id="start-here" class="toolbar toolbar-flex">
           <button id="btn-start-here">Start here</button>
         </div>
 
-        <div id='selection' class='toolbar toolbar-flex' style="display: none;">
+        <div id="selection" class="toolbar toolbar-flex" style="display: none;">
           <p>Move the map to desired location, then press</p>
-          <button id='query-parking'>Get parkings</button>
+          <button id="query-parking">Get parkings</button>
         </div>
 
-        <div id='loading' class='toolbar toolbar-flex' style="display: none;">
+        <div id="loading" class="toolbar toolbar-flex" style="display: none;">
           Loading parkings...
         </div>
 
-        <div id='challenge' class='toolbar toolbar-two-row' style="display: none;">
+        <div id="challenge" class="toolbar toolbar-two-row" style="display: none;">
           <div class="toolbar-action">
-            <button id='surface' class="action type" value='surface'>surface</button>
-            <button id='street_side' class="action type" value='street_side'>street side</button>
-            <button id='more' class='action'>more</button>
-            <button class='action next'>next ▶</button>
+            <button class="action type" value="surface">surface</button>
+            <button class="action type" value="street_side">street side</button>
+            <button id="more" class="action">more</button>
+            <button class="action next">next ▶</button>
           </div>
           <div class="toolbar-stats center">
-            Task: <span id='index'></span>/<span id='total'></span>
-            (<span id='solved'></span> solved,
-            <span id='skipped'></span> skipped)
+            Task: <span id="index"></span>/<span id="total"></span>
+            (<span id="solved"></span> solved,
+            <span id="skipped"></span> skipped)
           </div>
         </div>
       </div>
     </div>
 
     <div class="remodal" data-remodal-id="modal">
-      <div id='welcome' class='panel'>
+      <div id="welcome" class="panel">
         <h2>Welcome to<br>Parking Mapper</h2>
         <p>
           Use this app to identify
           <a href="https://wiki.openstreetmap.org/wiki/Key:parking">parking types</a>
           from aerial imagery.
         </p>
-        <div id='connected' class='div-authent' style="display: none;">
-          <p>Logged as: <span id='pseudo'></span></p>
-          <button id='start'>Start</button>
-          <button id='logout'>Logout</button>
-          <button class='btn-about'>About</a>
+        <div id="connected" class="div-authent" style="display: none;">
+          <p>Logged as: <span id="pseudo"></span></p>
+          <button id="start">Start</button>
+          <button id="logout">Logout</button>
+          <button class="btn-about">About</a>
         </div>
-        <div id='disconnected' class='div-authent' style="display: none;">
-          <button id='connect'>Connect</button>
-          <button class='btn-about'>About</a>
+        <div id="disconnected" class="div-authent" style="display: none;">
+          <button id="connect">Connect</button>
+          <button class="btn-about">About</a>
         </div>
       </div>
 
-      <div id='about' class='panel' style="display: none;">
-        <div class='title'>Parking Mapper</div>
+      <div id="about" class="panel" style="display: none;">
+        <div class="title">Parking Mapper</div>
         <div>Version: 1.1.0</div>
         <p>
           <a href="https://github.com/Binnette/parking-mapper">Code source on Github</a>
@@ -70,14 +70,14 @@
         <button id="back">◀ Back</button>
       </div>
 
-      <div id='done' class='panel' style='display: none;'>
+      <div id="done" class="panel" style="display: none;">
         <h2>Congratulation!</h2>
-        <p>You solved <span id='solved-done'></span> on <span id='total-done'></span> task(s) in this area.</p>
+        <p>You solved <span id="solved-done"></span> on <span id="total-done"></span> task(s) in this area.</p>
         <button class="continue">Continue</button>
       </div>
-      <div id='end-error' style='display: none;'>
+      <div id="end-error" style="display: none;">
         <h2>Error while sending change to server</h2>
-        <p id='closing-error'></p>
+        <p id="closing-error"></p>
         <button class="continue">Continue</button>
       </div>
 
@@ -85,15 +85,17 @@
 
     <div class="remodal" data-remodal-id="modal-more">
       <div class="more-actions">
-        <button id='lane' class="action type" value='lane'>lane</button>
-        <button id='underground' class="action type" value='underground'>underground</button>
-        <button id='multi-storey' class="action type" value='multi-storey'>multi-storey</button>
-        <button id='carports' class="action type" value='carports'>carports</button>
-        <button id='rooftop' class="action type" value='rooftop'>rooftop</button>
-        <button id='garage_boxes' class="action type" value='garage_boxes'>garage_boxes</button>
+        <button class="action type" value="lane">lane</button>
+        <button class="action type" value="underground">underground</button>
+        <button class="action type" value="multi-storey">multi-storey</button>
+        <button class="action type" value="carports">carports</button>
+        <button class="action type" value="rooftop">rooftop</button>
+        <button class="action type" value="garage_boxes">garage_boxes</button>
         <hr />
-        <button id='ideditor' class='action button'>edit in iD editor</button>
-        <button class='action next'>next ▶</button>
+        <div class="vertical-flex">
+          <button id="ideditor" class="action button">edit in iD editor</button>
+          <button class="action next">next ▶</button>
+        </div>
       </div>
     </div>
 

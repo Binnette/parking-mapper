@@ -15,7 +15,7 @@ import { conf, overpassApiUrl} from './conf.js'
 let map, polyline, bbox, parkings, currentElement, changesetId, index, solved, skipped, solvedChangeset, total;
 // changeset details
 let createdBy = 'Parking-Mapper 1.1.0';
-let defaultChangesetTags = { source: 'BDOrtho IGN' };
+let changesetSource = 'OpenStreetMap';
 
 conf.redirect_uri = window.location.origin + window.location.pathname;
 console.log(conf);
@@ -36,28 +36,31 @@ function initMap() {
   let baseLayers = {
     'OpenStreetMap': L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      maxZoom: 22, maxNativeZoom: 19
+      maxZoom: 20, maxNativeZoom: 19
     }),
     'BDOrtho IGN': L.tileLayer('https://proxy-ign.openstreetmap.fr/94GjiyqD/bdortho/{z}/{x}/{y}.jpg', {
       attribution: '&copy; <a href="https://www.openstreetmap.fr/bdortho/">BDOrtho IGN</a>',
-      maxZoom: 22, maxNativeZoom: 18
+      maxZoom: 20, maxNativeZoom: 18
     }),
     'Esri World Imagery': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      attribution: '&copy; <a href="https://wiki.openstreetmap.org/wiki/Esri">Esri</a>'
+      attribution: '&copy; <a href="https://wiki.openstreetmap.org/wiki/Esri">Esri</a>',
+      maxZoom: 20, maxNativeZoom: 19
     }),
     'Esri World Imagery (Clarity) Beta': L.tileLayer('https://clarity.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      attribution: '&copy; <a href="https://wiki.openstreetmap.org/wiki/Esri">Esri</a>'
+      attribution: '&copy; <a href="https://wiki.openstreetmap.org/wiki/Esri">Esri</a>',
+      maxZoom: 20, maxNativeZoom: 18
     })
   };
 
   baseLayers['OpenStreetMap'].addTo(map);
 
-  L.control.layers(baseLayers).addTo(map);
+  let layerControl = L.control.layers(baseLayers).addTo(map);
 
   map.on('baselayerchange', function (e) {
     if (e.name !== 'OpenStreetMap') {
-      defaultChangesetTags.source = e.name;
+      changesetSource = e.name;
     }
+    layerControl.collapse();
   });
 }
 
@@ -244,12 +247,14 @@ function loadParkings(bounds) {
         // go to the first parking
         next();
         // info message, change to aerial imagery
-        $.toast({
-          icon: 'info',
-          heading: 'Parking(s) found',
-          text: 'Switch to aerial view using the top right button.',
-          position: 'bottom-center'
-        });
+        if (changesetSource == 'OpenStreetMap') {
+          $.toast({
+            icon: 'info',
+            heading: 'Parking(s) found',
+            text: 'Switch to aerial view using the top right button.',
+            position: 'bottom-center'
+          });
+        }
         return;
       } else {
         $.toast({
@@ -280,16 +285,12 @@ function showParking(p) {
     map.removeLayer(polyline);
   }
 
-  p.center = {
-    'lat': (p.bounds.minlat + p.bounds.maxlat) / 2,
-    'lon': (p.bounds.minlon + p.bounds.maxlon) / 2
-  };
-
   currentElement = undefined;
   osm.fetchElement(p.type + '/' + p.id).then(function (data) {
     currentElement = data;
     polyline = L.polyline(p.geometry).addTo(map);
-    map.setView(p.center, 19);
+    let bounds = [[p.bounds.minlat, p.bounds.minlon], [p.bounds.maxlat, p.bounds.maxlon]];
+    map.fitBounds(bounds);
     $('#index').text(index);
     $('.action').prop('disabled', false);
   }).catch(function (err) {
@@ -372,7 +373,7 @@ function getComment() {
 }
 
 function getChangesetTags() {
-  return Object.assign({ parking: solvedChangeset }, defaultChangesetTags);
+  return Object.assign({ parking: solvedChangeset }, { source: changesetSource });
 }
 
 function newChangesetAndSetElementTag(type) {

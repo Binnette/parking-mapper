@@ -30,8 +30,17 @@ body, .remodal {
   font-size: 1.2em;
 }
 
-h1, h2,h3 {
+.remodal {
+  padding: 20px;
+}
+
+h1, h2, h3 {
   color: var(--warning);
+  margin: 0.5em 0;
+}
+
+p {
+  margin: 0.5em 0;
 }
 
 a {
@@ -126,6 +135,22 @@ html, body, .main {
 .more-actions {
   display: flex;
   flex-direction: column;
+  gap: 1px;
+}
+
+.vertical-flex {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.vertical-flex > * {
+  flex-grow: 1;
+}
+
+hr {
+  border: none;
+  margin: 4px;
 }
 
 #pseudo {
