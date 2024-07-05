@@ -1,4 +1,5 @@
- [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/Binnette/parking-mapper/build-and-deploy.yml)](https://github.com/Binnette/parking-mapper/actions/workflows/build-and-deploy.yml) 
 [![Use this app online | Parking Mapper 1.1.0](https://img.shields.io/badge/Use%20this%20app%20online-%20Parking%20Mapper%201.1.0-brightgreen.svg)](https://binnette.github.io/parking-mapper/)
 
 # Parking Mapper 1.1.0
