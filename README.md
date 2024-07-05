@@ -1,3 +1,6 @@
+ [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Use this app online | Parking Mapper 1.1.0](https://img.shields.io/badge/Use%20this%20app%20online-%20Parking%20Mapper%201.1.0-brightgreen.svg)](https://binnette.github.io/parking-mapper/)
+
 # Parking Mapper 1.1.0
 
 Parking Mapper is a simple webapp that helps you to directly contribute to OpenStreetMap.
