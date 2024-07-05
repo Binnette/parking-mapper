@@ -4,7 +4,7 @@ import basicSsl from '@vitejs/plugin-basic-ssl'
 import inject from "@rollup/plugin-inject"
 
 export default defineConfig({
-  base: 'parking-mapper',
+  base: '/parking-mapper',
   plugins: [
     inject({
       $: 'jquery',
