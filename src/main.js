@@ -57,9 +57,7 @@ function initMap() {
   let layerControl = L.control.layers(baseLayers).addTo(map);
 
   map.on('baselayerchange', function (e) {
-    if (e.name !== 'OpenStreetMap') {
-      changesetSource = e.name;
-    }
+    changesetSource = e.name;
     layerControl.collapse();
   });
 }
