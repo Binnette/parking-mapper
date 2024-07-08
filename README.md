@@ -1,6 +1,7 @@
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/Binnette/parking-mapper/pages%2Fpages-build-deployment?label=Build%20and%20Deploy)](https://github.com/Binnette/parking-mapper/actions/workflows/pages/pages-build-deployment)
-[![Use this app online | Parking Mapper 1.1.0](https://img.shields.io/badge/Use%20this%20app%20online-%20Parking%20Mapper%201.1.0-brightgreen.svg)](https://binnette.github.io/parking-mapper/)
+[![GitHub License](https://img.shields.io/github/license/Binnette/parking-mapper)](https://opensource.org/licenses/MIT)
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/Binnette/parking-mapper/build-and-deploy.yml?label=Build%20and%20Deploy)](https://github.com/Binnette/parking-mapper/actions/workflows/build-and-deploy.yml)
+[![W3C Validation](https://img.shields.io/w3c-validation/html?targetUrl=https%3A%2F%2Fbinnette.github.io%2Fparking-mapper%2F)](https://validator.nu/?doc=https%3A%2F%2Fbinnette.github.io%2Fparking-mapper%2F)
+[![Use this app online|Parking Mapper 1.1.0](https://img.shields.io/website?url=https%3A%2F%2Fbinnette.github.io%2Fparking-mapper%2F&up_message=Parking%20Mapper%201.1.0&label=Use%20this%20app%20online)](https://binnette.github.io/parking-mapper/)
 
 # Parking Mapper 1.1.0
 
