@@ -7,11 +7,10 @@
 
 Parking Mapper is a simple webapp that helps you to directly contribute to OpenStreetMap.
 You will have to identify the type of displayed parkings by looking to the aerial imagery.
-Currently this app is available only in France, cause it uses the imagey 'BDOrtho IGN'.
 
 See [documentation](https://wiki.openstreetmap.org/wiki/Key:parking) for details about the tag mapped by this app.
 
-Parking Maper is a JavaScript application that run 100% in your web browser, it doesn't need a backend. You can host this app on any static web hosting service.
+Parking Mapper is a JavaScript application that run 100% in your web browser, it doesn't need a backend. You can host this app on any static web hosting service.
 
 ## How to use this app
 
