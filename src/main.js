@@ -6,6 +6,7 @@ import 'leaflet/dist/leaflet.css'
 
 import L from 'leaflet'
 import $ from 'jquery'
+import OsmRequest from 'osm-request'
 import 'jquery-toast-plugin'
 import 'remodal'
 import { osmAuth } from 'osm-auth';
