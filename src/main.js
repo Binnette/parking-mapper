@@ -211,7 +211,9 @@ function queryParking() {
     return;
   }
   showToolbar('#loading');
-  loadParkings(map.getBounds());
+  var bounds = map.getBounds();
+  bounds = map.wrapLatLngBounds(bounds);
+  loadParkings(bounds);
 }
 
 // load parking from overpass
