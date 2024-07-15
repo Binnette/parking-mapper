@@ -5,12 +5,13 @@ import './style.css'
 import 'leaflet/dist/leaflet.css'
 
 import L from 'leaflet'
+import 'leaflet-bing-layer'
 import $ from 'jquery'
 import OsmRequest from 'osm-request'
 import 'jquery-toast-plugin'
 import 'remodal'
 import { osmAuth } from 'osm-auth';
-import { conf, overpassApiUrl} from './conf.js'
+import { conf, overpassApiUrl, bingMapsKey } from './conf.js'
 
 // ui components
 let map, polyline, bbox, parkings, currentElement, changesetId, index, solved, skipped, solvedChangeset, total;
@@ -39,16 +40,20 @@ function initMap() {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       maxZoom: 20, maxNativeZoom: 19
     }),
-    'BDOrtho IGN': L.tileLayer('https://proxy-ign.openstreetmap.fr/94GjiyqD/bdortho/{z}/{x}/{y}.jpg', {
-      attribution: '&copy; <a href="https://www.openstreetmap.fr/bdortho/">BDOrtho IGN</a>',
-      maxZoom: 20, maxNativeZoom: 18
-    }),
     'Esri World Imagery': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
       attribution: '&copy; <a href="https://wiki.openstreetmap.org/wiki/Esri">Esri</a>',
       maxZoom: 20, maxNativeZoom: 19
     }),
     'Esri World Imagery (Clarity) Beta': L.tileLayer('https://clarity.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
       attribution: '&copy; <a href="https://wiki.openstreetmap.org/wiki/Esri">Esri</a>',
+      maxZoom: 20, maxNativeZoom: 18
+    }),
+    'Bing Aerial': L.tileLayer.bing({
+      bingMapsKey: bingMapsKey,
+      maxZoom: 20
+    }),
+    'BDOrtho IGN': L.tileLayer('https://proxy-ign.openstreetmap.fr/94GjiyqD/bdortho/{z}/{x}/{y}.jpg', {
+      attribution: '&copy; <a href="https://www.openstreetmap.fr/bdortho/">BDOrtho IGN</a>',
       maxZoom: 20, maxNativeZoom: 18
     })
   };
