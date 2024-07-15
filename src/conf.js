@@ -13,7 +13,8 @@ if (window.location.toString().startsWith('https://binnette.github.io/parking-ma
 const url = 'https://www.openstreetmap.org';
 const apiUrl = 'https://api.openstreetmap.org';
 export const overpassApiUrl = 'https://overpass-api.de/api/';
-export const bingMapsKey = 'AlP2hZdKUYiJxdBH7O65tFO8mxiz_OZk5Vx6V5mxzW3WKkilMKP9hfixb1CpHuS4'
+export const bingMapsKey = 'AlP2hZdKUYiJxdBH7O65tFO8mxiz_OZk5Vx6V5mxzW3WKkilMKP9hfixb1CpHuS4';
+export const mapboxAccessToken = 'pk.eyJ1IjoiYmlubmV0dGUiLCJhIjoiY2x5bmYzczlzMDVleDJqc2ZtNzE2cTAwNCJ9.6FY-NU7wTMOGfox3wCurzA';
 
 export const conf = {
   scope: "read_prefs write_api",

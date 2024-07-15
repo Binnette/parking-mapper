@@ -11,7 +11,7 @@ import OsmRequest from 'osm-request'
 import 'jquery-toast-plugin'
 import 'remodal'
 import { osmAuth } from 'osm-auth';
-import { conf, overpassApiUrl, bingMapsKey } from './conf.js'
+import { conf, overpassApiUrl, bingMapsKey, mapboxAccessToken } from './conf.js'
 
 // ui components
 let map, polyline, bbox, parkings, currentElement, changesetId, index, solved, skipped, solvedChangeset, total;
@@ -49,8 +49,16 @@ function initMap() {
       maxZoom: 20, maxNativeZoom: 18
     }),
     'Bing Aerial': L.tileLayer.bing({
+      attribution: '&copy; <a href="https://opengeodata.org/microsoft-imagery-details">Bing Maps</a>',
       bingMapsKey: bingMapsKey,
       maxZoom: 20
+    }),
+    'Mapbox Satellite': L.tileLayer('https://api.mapbox.com/v4/{tileset_id}/{z}/{x}/{y}@2x.{format}?access_token={accessToken}', {
+      attribution: '&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a>',
+      tileset_id: 'mapbox.satellite',
+      format: 'jpg',
+      accessToken: mapboxAccessToken,
+      maxZoom: 20, maxNativeZoom: 18
     }),
     'BDOrtho IGN': L.tileLayer('https://proxy-ign.openstreetmap.fr/94GjiyqD/bdortho/{z}/{x}/{y}.jpg', {
       attribution: '&copy; <a href="https://www.openstreetmap.fr/bdortho/">BDOrtho IGN</a>',
