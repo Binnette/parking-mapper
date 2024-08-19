@@ -21,13 +21,13 @@
     "remodal": "^1.1.1"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "^4.18.1",
-    "@esbuild/linux-x64": "^0.23.0"
+    "@rollup/rollup-linux-x64-gnu": "^4.21.0",
+    "@esbuild/linux-x64": "^0.23.1"
   },
   "devDependencies": {
     "@rollup/plugin-inject": "^5.0.5",
     "@vitejs/plugin-basic-ssl": "^1.1.0",
     "gh-pages": "^6.1.1",
-    "vite": "^5.3.3"
+    "vite": "^5.4.1"
   }
 }
