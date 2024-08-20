@@ -340,7 +340,6 @@ function is404(err) {
 
 // disable button and go to next element
 function onClickNext() {
-  toggleModal(false, 'modal-more');
   $('.action').prop('disabled', true);
   skipped++;
   $('#skipped').text(skipped);
@@ -349,6 +348,7 @@ function onClickNext() {
 
 // go to the next parking
 function next() {
+  toggleModal(false, 'modal-more');
   if (index >= total) {
     $('#total-done').text(total);
     $('#solved-done').text(solved);
