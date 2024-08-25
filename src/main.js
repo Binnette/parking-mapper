@@ -122,6 +122,7 @@ function initUi() {
   $('#more').on('click', () => toggleModal(true, 'modal-more'));
   $('.next').on('click', onClickNext);
   $('#ideditor').on('click', onClickIdEditor);
+  $('#josmeditor').on('click', onClickJosmEditor);
 
   $('#back').on('click', () => showPanel('#welcome'));
   $('.continue').on('click', () => showPanel('#welcome'));
@@ -141,14 +142,27 @@ function toggleModal(toggle, id) {
 
 function onClickIdEditor() {
   if (currentElement) {
-    var url = 'https://www.openstreetmap.org/edit?' +
-      currentElement._type + "=" + currentElement._id;
+    const url = `https://www.openstreetmap.org/edit?${currentElement._type}=${currentElement._id}`;
     window.open(url);
   } else {
     $.toast({
       icon: 'error',
       heading: 'No current element',
       text: 'Can not open iD editor.',
+      position: 'bottom-center'
+    });
+  }
+}
+
+function onClickJosmEditor() {
+  if (currentElement) {
+    const url = `http://localhost:8111/load_object?objects=${currentElement._type}${currentElement._id}`;
+    window.open(url);
+  } else {
+    $.toast({
+      icon: 'error',
+      heading: 'No current element',
+      text: 'Can not open JOSM.',
       position: 'bottom-center'
     });
   }
