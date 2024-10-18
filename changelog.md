@@ -3,7 +3,7 @@
 ## 2024-10-18 - v1.2.0
 
 - Recreat the whole application to make it 'mobile first'
-- Update osm-request to 2.0.0
+- Update to osm-request 2.0.0, gh-pages 6.2.0 and vite 5.4.9
 - Add layers: Bing, Mapbox, OpenStreetMap and ESRI.
 - Add a GitHub build workflow
 - Add buttons: edit in iD, edit in Josm and fixme.
