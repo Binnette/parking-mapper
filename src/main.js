@@ -16,7 +16,8 @@ import { conf, overpassApiUrl, bingMapsKey, mapboxAccessToken } from './conf.js'
 // ui components
 let map, polyline, bbox, parkings, currentElement, changesetId, index, solved, skipped, solvedChangeset, total;
 // changeset details
-let createdBy = 'Parking-Mapper 1.1.0';
+const createdBy = 'Parking-Mapper 1.2.0';
+const SplitFixMe = 'Split this parking to set correct types to each part.'
 let changesetSource = 'OpenStreetMap';
 
 conf.redirect_uri = window.location.origin + window.location.pathname;
@@ -121,6 +122,7 @@ function initUi() {
   $('.type').on('click', onClickType);
   $('#more').on('click', () => toggleModal(true, 'modal-more'));
   $('.next').on('click', onClickNext);
+  $('#fixme').on('click', onClickFixme);
   $('#ideditor').on('click', onClickIdEditor);
   $('#josmeditor').on('click', onClickJosmEditor);
 
@@ -246,8 +248,8 @@ function loadParkings(bounds) {
   let url = overpassApiUrl + 'interpreter?data=' +
     '[out:json];' +
     '(' +
-    'way[amenity=parking][!parking](' + bbox + ');' +
-    'way[amenity=parking][parking=yes](' + bbox + ');' +
+    'way[amenity=parking][!parking][!fixme](' + bbox + ');' +
+    'way[amenity=parking][parking=yes][!fixme](' + bbox + ');' +
     ');' +
     'out ids geom;';
 
@@ -404,31 +406,37 @@ function getChangesetTags() {
   return Object.assign({ parking: solvedChangeset }, { source: changesetSource });
 }
 
-function newChangesetAndSetElementTag(type) {
-  solvedChangeset = 0;
-  osm.createChangeset(createdBy, getComment(), getChangesetTags()).then(function (id) {
-    changesetId = id;
-    setElementTag(type);
+function checkOrCreateChangeset() {
+  if (changesetId) {
+    return osm.isChangesetStillOpen(changesetId)
+      .catch((err) => {
+        console.warn(err);
+        return osm.createChangeset(createdBy, getComment(), getChangesetTags())
+          .then((id) => {
+            solvedChangeset = 0;
+            changesetId = id;
+          });
+      });
+  } else {
+    return osm.createChangeset(createdBy, getComment(), getChangesetTags())
+      .then((id) => {
+        solvedChangeset = 0;
+        changesetId = id;
+      });
+  }
+}
+
+function onClickFixme() {
+  checkOrCreateChangeset().then(() => {
+    setElementTag(SplitFixMe);
   });
 }
 
-// create or use current changeset, then change element tags
+// Ensure a changeset is open, then set the parking type
 function setParkingType(type) {
-  if (changesetId) {
-    // we have a changesetid, is it still open?
-    osm.isChangesetStillOpen(changesetId)
-      .then(function () {
-        // yes, changeset still opened
-        setElementTag(type);
-      })
-      .catch(function (err) {
-        // no changeset is closed, we need a new one
-        newChangesetAndSetElementTag(type);
-      });
-  } else {
-    // we don't have a current changeset
-    newChangesetAndSetElementTag(type);
-  }
+  checkOrCreateChangeset().then(() => {
+    setElementTag(type);
+  });
 }
 
 function setElementSuccess(newElementVersion, type) {
@@ -456,7 +464,13 @@ function setElementSuccess(newElementVersion, type) {
 // set the tag parking to the element
 function setElementTag(type) {
   console.log('setElementTag id:' + currentElement._id + ", type:" + type + ", version:" + currentElement.$.version);
-  currentElement = osm.setTag(currentElement, 'parking', type);
+  if (type == SplitFixMe) {
+    // We add a fixme tag
+    currentElement = osm.setTag(currentElement, 'fixme', SplitFixMe);
+  } else {
+    // We set the parking type in tag 'parking'
+    currentElement = osm.setTag(currentElement, 'parking', type);
+  }
   // send element to OSM api
   osm.sendElement(currentElement, changesetId)
     .then(function (data) {
