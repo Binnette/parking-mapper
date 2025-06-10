@@ -10,8 +10,6 @@ export default defineConfig({
       $: 'jquery',
       jQuery: 'jquery',
     }),
-    basicSsl({
-      name: 'test',
-    })
+    basicSsl()
   ]
 })

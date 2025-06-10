@@ -1,8 +1,8 @@
 :root {
   /*https://coolors.co/ff595e-ffca3a-8ac926-1982c4-6a4c93*/
 
-  --light: #f8f9faff;
-  --dark: #343a40ff;
+  --light: #f8f9fa;
+  --dark: #343a40;
 
   --dark-danger:  #cd0007;
   --dark-warning: #bb8900;
@@ -16,11 +16,11 @@
   --info:    #1982c4;
   --primary: #6a4c93;
 
-  --light-danger:  #ff9a9dff;
-  --light-warning: #ffdf88ff;
-  --light-success: #bdf06cff;
-  --light-info:    #5db9f3ff;
-  --light-primary: #a177dcff;
+  --light-danger:  #ff9a9d;
+  --light-warning: #ffdf88;
+  --light-success: #bdf06c;
+  --light-info:    #5db9f3;
+  --light-primary: #a177dc;
 }
 
 body, .remodal {
@@ -28,6 +28,7 @@ body, .remodal {
   margin: 0;
   color: var(--light);
   font-size: 1.2em;
+  font-family: 'Arial', sans-serif;
 }
 
 .remodal {
@@ -62,6 +63,11 @@ a.button, button {
   font-weight: bold;
   font-size: 1em;
   cursor: pointer;
+}
+
+
+a.button:hover, button:hover {
+  background-color: var(--light-primary);
 }
 
 a.button:disabled, button:disabled {
@@ -153,8 +159,13 @@ hr {
   margin: 4px;
 }
 
-#pseudo {
+#user_name {
   color: var(--success);
+}
+
+#user_img {
+  height: 1.2em;
+  vertical-align: middle;
 }
 
 .jq-toast-wrap {

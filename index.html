@@ -12,12 +12,12 @@
       <div id="map"></div>
       <div id="bottom-bar">
         <div id="start-here" class="toolbar toolbar-flex">
-          <button id="btn-start-here">Start here</button>
+          <button id="btn-start-here">Start Here</button>
         </div>
 
         <div id="selection" class="toolbar toolbar-flex" style="display: none;">
           <p>Move the map to desired location, then press</p>
-          <button id="query-parking">Get parkings</button>
+          <button id="query-parking">Get Parkings</button>
         </div>
 
         <div id="loading" class="toolbar toolbar-flex" style="display: none;">
@@ -49,7 +49,10 @@
           from aerial imagery.
         </p>
         <div id="connected" class="div-authent" style="display: none;">
-          <p>Logged as: <span id="pseudo"></span></p>
+          <p>Logged in as:
+            <img id="user_img" src="" alt="user image" />
+            <a href="https://www.openstreetmap.org/user/" id="user_name"></a>
+          </p>
           <button id="start">Start</button>
           <button id="logout">Logout</button>
           <button class="btn-about">About</button>
@@ -62,20 +65,20 @@
 
       <div id="about" class="panel" style="display: none;">
         <div class="title">Parking Mapper</div>
-        <div>Version: 1.2.0</div>
+        <div>Version: 1.3.0</div>
         <p>
-          <a href="https://github.com/Binnette/parking-mapper">Code source on Github</a>
+          <a href="https://github.com/Binnette/parking-mapper">Source code on GitHub</a>
         </p>
         <button id="back">◀ Back</button>
       </div>
 
       <div id="done" class="panel" style="display: none;">
         <h2>Congratulation!</h2>
-        <p>You solved <span id="solved-done"></span> on <span id="total-done"></span> task(s) in this area.</p>
+        <p>You solved <span id="solved-done"></span> out of <span id="total-done"></span> task(s) in this area.</p>
         <button class="continue">Continue</button>
       </div>
       <div id="end-error" style="display: none;">
-        <h2>Error while sending change to server</h2>
+        <h2>Error while sending change(s) to the server</h2>
         <p id="closing-error"></p>
         <button class="continue">Continue</button>
       </div>

@@ -16,7 +16,7 @@ import { conf, overpassApiUrl, bingMapsKey, mapboxAccessToken } from './conf.js'
 // ui components
 let map, polyline, bbox, parkings, currentElement, changesetId, index, solved, skipped, solvedChangeset, total;
 // changeset details
-const createdBy = 'Parking-Mapper 1.2.0';
+const createdBy = 'Parking-Mapper 1.3.0';
 const SplitFixMe = 'Split this parking to set correct types to each part.'
 let changesetSource = 'OpenStreetMap';
 
@@ -97,7 +97,9 @@ function initUser() {
       } else {
         $('#connected').toggle(true);
         let d = JSON.parse(data);
-        $('#pseudo').text(d.user.display_name);
+        $('#user_img').attr('src', d.user.img.href);
+        $('#user_name').text(d.user.display_name);
+        $('#user_name').attr('href', `https://www.openstreetmap.org/user/${encodeURIComponent(d.user.display_name)}`);
       }
     });
   } else {

@@ -3,7 +3,7 @@
 [![W3C Validation](https://img.shields.io/w3c-validation/html?targetUrl=https%3A%2F%2Fbinnette.github.io%2Fparking-mapper%2F)](https://validator.nu/?doc=https%3A%2F%2Fbinnette.github.io%2Fparking-mapper%2F)
 [![Use this app online|Parking Mapper](https://img.shields.io/website?url=https%3A%2F%2Fbinnette.github.io%2Fparking-mapper%2F&up_message=Parking%20Mapper&label=Use%20this%20app%20online)](https://binnette.github.io/parking-mapper/)
 
-# Parking Mapper 1.2.0
+# Parking Mapper 1.3.0
 
 Parking Mapper is a simple webapp that helps you to directly contribute to OpenStreetMap.
 You will have to identify the type of displayed parkings by looking to the aerial imagery.
@@ -34,3 +34,11 @@ Note: you can skip current parking by pressing button 'next'
 5. Open url: https://localhost:5173/parking-mapper
 
 Note: this app works and is connected to OSM API, so you can use it directly to edit OSM data.
+
+### 📚 Libraries Used:
+- [jQuery](https://www.npmjs.com/package/jquery)
+- [jQuery Toast Plugin](https://www.npmjs.com/package/jquery-toast-plugin)
+- [Leaflet](https://www.npmjs.com/package/leaflet)
+- [osm-auth](https://www.npmjs.com/package/osm-auth)
+- [osm-request](https://www.npmjs.com/package/osm-request)
+- [Remodal](https://www.npmjs.com/package/remodal)
