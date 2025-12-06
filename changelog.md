@@ -1,7 +1,10 @@
 # ✨ Changelog
 
+## 2025-12-06 - v1.4.0
+- **Updated** to Vite **7.2.6**, osm-auth **3.1.1** and @vitejs/plugin-basic-ssl **2.1.0**.
+
 ## 2025-05-25 - v1.3.0
-- **Updated** to Vite **6.3.5**, gh-pages **6.3.0**, osm-auth **2.6.0**, and @vitejs/plugin-basic-ssl **2.0.0**.
+- **Updated** to Vite **6.3.5**, gh-pages **6.3.0**, osm-auth **2.6.0** and @vitejs/plugin-basic-ssl **2.0.0**.
 
 ## 2024-10-18 - v1.2.0
 - **Recreated** the entire application with a **mobile-first** approach.

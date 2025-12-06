@@ -16,7 +16,7 @@ import { conf, overpassApiUrl, bingMapsKey, mapboxAccessToken } from './conf.js'
 // ui components
 let map, polyline, bbox, parkings, currentElement, changesetId, index, solved, skipped, solvedChangeset, total;
 // changeset details
-const createdBy = 'Parking-Mapper 1.3.0';
+const createdBy = 'Parking-Mapper 1.4.0';
 const SplitFixMe = 'Split this parking to set correct types to each part.'
 let changesetSource = 'OpenStreetMap';
 
